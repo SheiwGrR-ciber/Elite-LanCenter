@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- =============================================
+         ELITE LAN CENTER - PALETA AURORA BOREAL
+         ============================================= -->
+
+    <!-- Colores principales Aurora -->
+    <Color x:Key="AuroraGreenColor">#01EFAC</Color>
+    <Color x:Key="AuroraTealColor">#01CBAE</Color>
+    <Color x:Key="AuroraBlueColor">#2082A6</Color>
+    <Color x:Key="AuroraPurpleColor">#524094</Color>
+    <Color x:Key="AuroraDarkPurpleColor">#562A83</Color>
+
+    <!-- Colores Dark Mode -->
+    <Color x:Key="DarkBgColor">#111827</Color>
+    <Color x:Key="DarkPanelColor">#1A1F35</Color>
+    <Color x:Key="DarkSurfaceColor">#2D3250</Color>
+    <Color x:Key="DarkTextColor">#E8EAF6</Color>
+    <Color x:Key="DarkSubtextColor">#8892B0</Color>
+
+    <!-- Colores Light Mode -->
+    <Color x:Key="LightBgColor">#F0FAFA</Color>
+    <Color x:Key="LightPanelColor">#FFFFFF</Color>
+    <Color x:Key="LightTextColor">#1A1A2E</Color>
+    <Color x:Key="LightSubtextColor">#666888</Color>
+
+    <!-- Colores de estado -->
+    <Color x:Key="SuccessColor">#01EFAC</Color>
+    <Color x:Key="ErrorColor">#EF4444</Color>
+    <Color x:Key="WarningColor">#F59E0B</Color>
+    <Color x:Key="InfoColor">#2082A6</Color>
+
+    <!-- SolidColorBrushes Dark Mode -->
+    <SolidColorBrush x:Key="AuroraGreenBrush" Color="{StaticResource AuroraGreenColor}"/>
+    <SolidColorBrush x:Key="AuroraTealBrush" Color="{StaticResource AuroraTealColor}"/>
+    <SolidColorBrush x:Key="AuroraBlueBrush" Color="{StaticResource AuroraBlueColor}"/>
+    <SolidColorBrush x:Key="AuroraPurpleBrush" Color="{StaticResource AuroraPurpleColor}"/>
+    <SolidColorBrush x:Key="AuroraDarkPurpleBrush" Color="{StaticResource AuroraDarkPurpleColor}"/>
+
+    <SolidColorBrush x:Key="DarkBgBrush" Color="{StaticResource DarkBgColor}"/>
+    <SolidColorBrush x:Key="DarkPanelBrush" Color="{StaticResource DarkPanelColor}"/>
+    <SolidColorBrush x:Key="DarkSurfaceBrush" Color="{StaticResource DarkSurfaceColor}"/>
+    <SolidColorBrush x:Key="DarkTextBrush" Color="{StaticResource DarkTextColor}"/>
+    <SolidColorBrush x:Key="DarkSubtextBrush" Color="{StaticResource DarkSubtextColor}"/>
+
+    <!-- SolidColorBrushes Light Mode -->
+    <SolidColorBrush x:Key="LightBgBrush" Color="{StaticResource LightBgColor}"/>
+    <SolidColorBrush x:Key="LightPanelBrush" Color="{StaticResource LightPanelColor}"/>
+    <SolidColorBrush x:Key="LightTextBrush" Color="{StaticResource LightTextColor}"/>
+    <SolidColorBrush x:Key="LightSubtextBrush" Color="{StaticResource LightSubtextColor}"/>
+
+    <!-- SolidColorBrushes de estado -->
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColor}"/>
+
+</ResourceDictionary>
