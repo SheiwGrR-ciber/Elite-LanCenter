@@ -9,8 +9,48 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="obj\Debug\net10.0-windows\.NETCoreApp,Version=v10.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\net10.0-windows\App.g.i.cs" />
+    <Compile Include="obj\Debug\net10.0-windows\EliteLanCenter.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net10.0-windows\EliteLanCenter.GlobalUsings.g.cs" />
+    <Compile Include="obj\Debug\net10.0-windows\EliteLanCenter_Content.g.i.cs" />
+    <Compile Include="obj\Debug\net10.0-windows\MainWindow.g.i.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="obj\Debug\net10.0-windows\EliteLanCenter.designer.deps.json" />
+    <Content Include="obj\Debug\net10.0-windows\EliteLanCenter.designer.runtimeconfig.json" />
+    <Content Include="obj\EliteLanCenter.csproj.nuget.dgspec.json" />
+    <Content Include="obj\project.assets.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.2" />
     <PackageReference Include="MaterialDesignThemes" Version="5.3.2" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
+    <Folder Include="bin\Debug\net10.0-windows\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="obj\Debug\net10.0-windows\refint\" />
+    <Folder Include="obj\Debug\net10.0-windows\ref\" />
+    <Folder Include="Reports\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="obj\Debug\net10.0-windows\EliteLanCenter.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net10.0-windows\EliteLanCenter.assets.cache" />
+    <None Include="obj\Debug\net10.0-windows\EliteLanCenter.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net10.0-windows\EliteLanCenter.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Debug\net10.0-windows\EliteLanCenter_MarkupCompile.i.cache" />
+    <None Include="obj\EliteLanCenter.csproj.nuget.g.props" />
+    <None Include="obj\EliteLanCenter.csproj.nuget.g.targets" />
+    <None Include="obj\project.nuget.cache" />
   </ItemGroup>
 
 </Project>
