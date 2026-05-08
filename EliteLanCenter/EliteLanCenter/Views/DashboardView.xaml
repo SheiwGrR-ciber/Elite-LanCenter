@@ -1,0 +1,242 @@
+﻿<Window x:Class="EliteLanCenter.Views.DashboardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Elite LanCenter — Dashboard"
+        Height="700" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="#111827"
+        FontFamily="{StaticResource InterFont}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ── SIDEBAR ─────────────────────────── -->
+        <Border Grid.Column="0" Background="#1A1F35">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo -->
+                <Border Grid.Row="0" Padding="16 20">
+                    <StackPanel>
+                        <Border CornerRadius="12" Padding="12 10"
+                                Margin="0 0 0 4">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#524094" Offset="0"/>
+                                    <GradientStop Color="#562A83" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <StackPanel>
+                                <TextBlock Text="ELITE"
+                                           FontFamily="{StaticResource MontserratFont}"
+                                           FontSize="20"
+                                           FontWeight="Bold"
+                                           Foreground="#01EFAC"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="LAN CENTER"
+                                           FontFamily="{StaticResource MontserratFont}"
+                                           FontSize="9"
+                                           Foreground="#8892B0"
+                                           HorizontalAlignment="Center"
+                                           LetterSpacing="3"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Info usuario -->
+                        <Border CornerRadius="8" Padding="10 8"
+                                Background="#2D3250" Margin="0 8 0 0">
+                            <StackPanel>
+                                <TextBlock x:Name="LblNombreUsuario"
+                                           Text="Usuario"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="#E8EAF6"/>
+                                <TextBlock x:Name="LblRolUsuario"
+                                           Text="Rol"
+                                           FontSize="11"
+                                           Foreground="#01CBAE"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Menu items -->
+                <StackPanel Grid.Row="1" Margin="8 8 8 0">
+
+                    <TextBlock Text="MENÚ PRINCIPAL"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="#2D3250"
+                               Margin="8 0 0 8"
+                               LetterSpacing="2"/>
+
+                    <!-- Dashboard -->
+                    <Button x:Name="BtnDashboard"
+                            Click="BtnDashboard_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Dashboard">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏠" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Dashboard"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Ventas -->
+                    <Button x:Name="BtnVentas"
+                            Click="BtnVentas_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Ventas">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🛒" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Registrar Venta"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Turnos -->
+                    <Button x:Name="BtnTurnos"
+                            Click="BtnTurnos_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Turnos">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔄" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Control de Turnos"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Reportes -->
+                    <Button x:Name="BtnReportes"
+                            Click="BtnReportes_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Reportes">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📊" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Generar Reporte"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Caseros -->
+                    <Button x:Name="BtnCaseros"
+                            Click="BtnCaseros_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Caseros">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏷️" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Caseros RFID"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Solo Admin -->
+                    <TextBlock x:Name="LblMenuAdmin"
+                               Text="ADMINISTRACIÓN"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="#2D3250"
+                               Margin="8 16 0 8"
+                               LetterSpacing="2"
+                               Visibility="Collapsed"/>
+
+                    <Button x:Name="BtnInventario"
+                            Click="BtnInventario_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Inventario"
+                            Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📦" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Inventario"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnAdministracion"
+                            Click="BtnAdministracion_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Administracion"
+                            Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚙️" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Administración"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnEstadisticas"
+                            Click="BtnEstadisticas_Click"
+                            Style="{StaticResource MenuButton}"
+                            Tag="Estadisticas"
+                            Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📈" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Estadísticas"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+
+                <!-- Cerrar sesión -->
+                <Border Grid.Row="2" Padding="8 12">
+                    <Button Click="BtnCerrarSesion_Click"
+                            Style="{StaticResource MenuButton}"
+                            Foreground="#EF4444">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🚪" FontSize="16" Margin="0 0 10 0"/>
+                            <TextBlock Text="Cerrar Sesión"/>
+                        </StackPanel>
+                    </Button>
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <!-- ── CONTENIDO PRINCIPAL ──────────────── -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Background="#1A1F35"
+                    BorderThickness="0 0 0 1">
+                <Border.BorderBrush>
+                    <SolidColorBrush Color="#2D3250"/>
+                </Border.BorderBrush>
+                <Grid Margin="24 0">
+                    <TextBlock x:Name="LblTituloPagina"
+                               Text="Dashboard"
+                               FontFamily="{StaticResource MontserratFont}"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#E8EAF6"
+                               VerticalAlignment="Center"/>
+
+                    <StackPanel HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                        <TextBlock x:Name="LblFecha"
+                                   FontSize="12"
+                                   Foreground="#8892B0"
+                                   VerticalAlignment="Center"
+                                   Margin="0 0 16 0"/>
+                        <TextBlock x:Name="LblHora"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#01EFAC"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Área de contenido — aquí se cargan las páginas -->
+            <Frame Grid.Row="1"
+                   x:Name="MainFrame"
+                   NavigationUIVisibility="Hidden"
+                   Background="#111827"/>
+
+        </Grid>
+    </Grid>
+</Window>

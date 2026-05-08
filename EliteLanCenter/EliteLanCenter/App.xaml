@@ -15,6 +15,15 @@
                 <ResourceDictionary Source="/Themes/StylesTheme.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Fuentes personalizadas -->
+            <FontFamily x:Key="MontserratFont">
+                pack://application:,,,/Assets/#Montserrat
+            </FontFamily>
+            <FontFamily x:Key="InterFont">
+                pack://application:,,,/Assets/#Inter
+            </FontFamily>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

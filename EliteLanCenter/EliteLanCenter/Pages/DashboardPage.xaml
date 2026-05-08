@@ -1,0 +1,293 @@
+﻿<Page x:Class="EliteLanCenter.Pages.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#111827"
+      FontFamily="{StaticResource InterFont}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <!-- ── Turno activo ───────────────── -->
+            <Border x:Name="PanelTurno"
+                    CornerRadius="12" Padding="20"
+                    Margin="0 0 0 16">
+                <Border.Background>
+                    <SolidColorBrush Color="#1A1F35"/>
+                </Border.Background>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock x:Name="LblEstadoTurno"
+                                   Text="⚠ No hay turno abierto"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#F59E0B"/>
+                        <TextBlock x:Name="LblInfoTurno"
+                                   Text="Abre un turno para comenzar"
+                                   FontSize="12"
+                                   Foreground="#8892B0"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+
+                    <!-- Selector de turno -->
+                    <StackPanel Grid.Column="1"
+                                x:Name="PanelAbrirTurno"
+                                Orientation="Horizontal">
+                        <ComboBox x:Name="CmbTipoTurno"
+                                  Width="120"
+                                  Height="36"
+                                  Margin="0 0 8 0"
+                                  Background="#2D3250"
+                                  Foreground="#E8EAF6"
+                                  BorderBrush="#2D3250">
+                            <ComboBoxItem Content="Mañana"/>
+                            <ComboBoxItem Content="Tarde"/>
+                            <ComboBoxItem Content="Noche" IsSelected="True"/>
+                        </ComboBox>
+                        <Button Content="Abrir Turno"
+                                Style="{StaticResource AccentButton}"
+                                Width="120"
+                                Click="BtnAbrirTurno_Click"/>
+                    </StackPanel>
+
+                    <!-- Botón cerrar turno -->
+                    <Button Grid.Column="1"
+                            x:Name="BtnCerrarTurno"
+                            Content="🔒 Cerrar Turno"
+                            Style="{StaticResource DangerButton}"
+                            Width="140"
+                            Visibility="Collapsed"
+                            Click="BtnCerrarTurno_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- ── Tarjetas resumen ───────────── -->
+            <Grid Margin="0 0 0 16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Ventas del turno -->
+                <Border Grid.Column="0" CornerRadius="12"
+                        Margin="0 0 8 0" Padding="16">
+                    <Border.Background>
+                        <SolidColorBrush Color="#1A1F35"/>
+                    </Border.Background>
+                    <StackPanel>
+                        <Border Width="4" Height="4"
+                                CornerRadius="2"
+                                Background="#01EFAC"
+                                HorizontalAlignment="Left"
+                                Margin="0 0 0 8"/>
+                        <TextBlock Text="💰"
+                                   FontSize="24"
+                                   Margin="0 0 0 8"/>
+                        <TextBlock Text="Ventas del Turno"
+                                   FontSize="11"
+                                   Foreground="#8892B0"/>
+                        <TextBlock x:Name="LblVentasTurno"
+                                   Text="S/ 0.00"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#01EFAC"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Valor inventario -->
+                <Border Grid.Column="1" CornerRadius="12"
+                        Margin="4 0 4 0" Padding="16">
+                    <Border.Background>
+                        <SolidColorBrush Color="#1A1F35"/>
+                    </Border.Background>
+                    <StackPanel>
+                        <Border Width="4" Height="4"
+                                CornerRadius="2"
+                                Background="#01CBAE"
+                                HorizontalAlignment="Left"
+                                Margin="0 0 0 8"/>
+                        <TextBlock Text="📦"
+                                   FontSize="24"
+                                   Margin="0 0 0 8"/>
+                        <TextBlock Text="Valor Inventario"
+                                   FontSize="11"
+                                   Foreground="#8892B0"/>
+                        <TextBlock x:Name="LblValorInventario"
+                                   Text="S/ 0.00"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#01CBAE"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Turno activo -->
+                <Border Grid.Column="2" CornerRadius="12"
+                        Margin="4 0 4 0" Padding="16">
+                    <Border.Background>
+                        <SolidColorBrush Color="#1A1F35"/>
+                    </Border.Background>
+                    <StackPanel>
+                        <Border Width="4" Height="4"
+                                CornerRadius="2"
+                                Background="#2082A6"
+                                HorizontalAlignment="Left"
+                                Margin="0 0 0 8"/>
+                        <TextBlock Text="🔄"
+                                   FontSize="24"
+                                   Margin="0 0 0 8"/>
+                        <TextBlock Text="Turno Activo"
+                                   FontSize="11"
+                                   Foreground="#8892B0"/>
+                        <TextBlock x:Name="LblTurnoActivo"
+                                   Text="Ninguno"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#2082A6"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Caseros activos -->
+                <Border Grid.Column="3" CornerRadius="12"
+                        Margin="8 0 0 0" Padding="16">
+                    <Border.Background>
+                        <SolidColorBrush Color="#1A1F35"/>
+                    </Border.Background>
+                    <StackPanel>
+                        <Border Width="4" Height="4"
+                                CornerRadius="2"
+                                Background="#524094"
+                                HorizontalAlignment="Left"
+                                Margin="0 0 0 8"/>
+                        <TextBlock Text="🏷️"
+                                   FontSize="24"
+                                   Margin="0 0 0 8"/>
+                        <TextBlock Text="Caseros Activos"
+                                   FontSize="11"
+                                   Foreground="#8892B0"/>
+                        <TextBlock x:Name="LblCaserosActivos"
+                                   Text="0"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#524094"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- ── Accesos rápidos ────────────── -->
+            <TextBlock Text="ACCESOS RÁPIDOS"
+                       FontSize="11"
+                       FontWeight="Bold"
+                       Foreground="#2D3250"
+                       LetterSpacing="2"
+                       Margin="0 0 0 12"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Registrar venta -->
+                <Border Grid.Column="0" CornerRadius="12"
+                        Margin="0 0 8 0" Padding="20"
+                        Cursor="Hand"
+                        MouseLeftButtonUp="BtnIrVentas_Click">
+                    <Border.Background>
+                        <SolidColorBrush Color="#1A1F35"/>
+                    </Border.Background>
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="🛒"
+                                   FontSize="32"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Registrar Venta"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#01EFAC"
+                                   HorizontalAlignment="Center"
+                                   Margin="0 8 0 0"/>
+                        <TextBlock Text="Registra los productos vendidos"
+                                   FontSize="11"
+                                   Foreground="#8892B0"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Control turnos -->
+                <Border Grid.Column="1" CornerRadius="12"
+                        Margin="4 0 4 0" Padding="20"
+                        Cursor="Hand"
+                        MouseLeftButtonUp="BtnIrTurnos_Click">
+                    <Border.Background>
+                        <SolidColorBrush Color="#1A1F35"/>
+                    </Border.Background>
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="🔄"
+                                   FontSize="32"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Control de Turnos"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#01CBAE"
+                                   HorizontalAlignment="Center"
+                                   Margin="0 8 0 0"/>
+                        <TextBlock Text="Verifica el stock y cierra turno"
+                                   FontSize="11"
+                                   Foreground="#8892B0"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Generar reporte -->
+                <Border Grid.Column="2" CornerRadius="12"
+                        Margin="8 0 0 0" Padding="20"
+                        Cursor="Hand"
+                        MouseLeftButtonUp="BtnIrReportes_Click">
+                    <Border.Background>
+                        <SolidColorBrush Color="#1A1F35"/>
+                    </Border.Background>
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="📊"
+                                   FontSize="32"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Generar Reporte"
+                                   FontFamily="{StaticResource MontserratFont}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#2082A6"
+                                   HorizontalAlignment="Center"
+                                   Margin="0 8 0 0"/>
+                        <TextBlock Text="Genera el PDF del turno"
+                                   FontSize="11"
+                                   Foreground="#8892B0"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>
