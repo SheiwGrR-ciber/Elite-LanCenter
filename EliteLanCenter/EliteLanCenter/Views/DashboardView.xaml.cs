@@ -68,7 +68,7 @@ namespace EliteLanCenter.Views
         }
 
         // ── Navegación ─────────────────────────
-        private void NavegaryA(string pagina)
+        public void NavegarA(string pagina)
         {
             LblTituloPagina.Text = pagina;
 
