@@ -160,10 +160,10 @@ namespace EliteLanCenter.Controllers
         }
 
         // Obtener estadísticas semanales
-        public static List<(string fecha, double maquinas, double productos)>
+        public static List<(string fecha, double maquinas, double productos, double yape, double descuentos, double liquido, double efectivo, int transacciones)>
             ObtenerEstadisticasSemana(string fechaInicio, string fechaFin)
         {
-            var estadisticas = new List<(string, double, double)>();
+            var estadisticas = new List<(string, double, double, double, double, double, double, int)>();
 
             using var connection = DatabaseConnection.GetConnection();
             using var command = connection.CreateCommand();
@@ -172,7 +172,12 @@ namespace EliteLanCenter.Controllers
                 SELECT 
                     t.Fecha,
                     COALESCE(SUM(r.IngresoMaquinas), 0) AS Maquinas,
-                    COALESCE(SUM(r.TotalProductos), 0)  AS Productos
+                    COALESCE(SUM(r.TotalProductos), 0) AS Productos,
+                    COALESCE(SUM(r.MontoYape), 0) AS Yape,
+                    COALESCE(SUM(r.Descuentos), 0) AS Descuentos,
+                    COALESCE(SUM(r.TotalLiquido), 0) AS Liquido,
+                    COALESCE(SUM(r.Efectivo), 0) AS Efectivo,
+                    COUNT(r.Id) AS Transacciones
                 FROM Turnos t
                 LEFT JOIN Reportes r ON r.TurnoId = t.Id
                 WHERE t.Fecha BETWEEN @inicio AND @fin
@@ -190,11 +195,96 @@ namespace EliteLanCenter.Controllers
                 estadisticas.Add((
                     reader.GetString(0),
                     reader.GetDouble(1),
-                    reader.GetDouble(2)
+                    reader.GetDouble(2),
+                    reader.GetDouble(3),
+                    reader.GetDouble(4),
+                    reader.GetDouble(5),
+                    reader.GetDouble(6),
+                    reader.GetInt32(7)
                 ));
             }
 
             return estadisticas;
+        }
+
+        // Obtener estadísticas por turno
+        public static (double manna, double tarde, double noche) ObtenerEstadisticasPorTurno(string fechaInicio, string fechaFin)
+        {
+            using var connection = DatabaseConnection.GetConnection();
+            using var command = connection.CreateCommand();
+
+            command.CommandText = @"
+                SELECT 
+                    t.Tipo,
+                    COALESCE(SUM(r.IngresoMaquinas + r.TotalProductos), 0) AS Total
+                FROM Turnos t
+                LEFT JOIN Reportes r ON r.TurnoId = t.Id
+                WHERE t.Fecha BETWEEN @inicio AND @fin
+                GROUP BY t.Tipo
+            ";
+
+            command.Parameters.AddWithValue("@inicio", fechaInicio);
+            command.Parameters.AddWithValue("@fin", fechaFin);
+
+            double manna = 0, tarde = 0, noche = 0;
+
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var tipo = reader.GetString(0);
+                var total = reader.GetDouble(1);
+
+                switch (tipo)
+                {
+                    case "Mañana": manna = total; break;
+                    case "Tarde": tarde = total; break;
+                    case "Noche": noche = total; break;
+                }
+            }
+
+            return (manna, tarde, noche);
+        }
+
+        // Obtener productos más vendidos
+        public static List<(string nombre, int cantidad, double total)> ObtenerProductosMasVendidos(
+            string fechaInicio, string fechaFin, int limite = 10)
+        {
+            var productos = new List<(string, int, double)>();
+
+            using var connection = DatabaseConnection.GetConnection();
+            using var command = connection.CreateCommand();
+
+            command.CommandText = @"
+                SELECT 
+                    p.Nombre,
+                    SUM(v.Cantidad) AS CantidadTotal,
+                    SUM(v.Total) AS TotalVentas
+                FROM Ventas v
+                JOIN Productos p ON p.Id = v.ProductoId
+                JOIN Turnos t ON t.Id = v.TurnoId
+                WHERE t.Fecha BETWEEN @inicio AND @fin
+                GROUP BY p.Id, p.Nombre
+                ORDER BY CantidadTotal DESC
+                LIMIT @limite
+            ";
+
+            command.Parameters.AddWithValue("@inicio", fechaInicio);
+            command.Parameters.AddWithValue("@fin", fechaFin);
+            command.Parameters.AddWithValue("@limite", limite);
+
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                productos.Add((
+                    reader.GetString(0),
+                    reader.GetInt32(1),
+                    reader.GetDouble(2)
+                ));
+            }
+
+            return productos;
         }
 
         // Mapear reporte desde reader

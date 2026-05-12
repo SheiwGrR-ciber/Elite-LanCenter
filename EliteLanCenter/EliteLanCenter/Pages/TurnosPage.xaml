@@ -146,7 +146,6 @@
                                FontSize="11"
                                FontWeight="Bold"
                                Foreground="#2D3250"
-                               LetterSpacing="2"
                                Margin="0 0 0 12"/>
 
                     <ItemsControl x:Name="ListaSemana">

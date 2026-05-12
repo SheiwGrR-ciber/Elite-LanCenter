@@ -3,6 +3,7 @@
 // =============================================
 
 using EliteLanCenter.Controllers;
+using EliteLanCenter.Database;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -40,7 +41,26 @@ namespace EliteLanCenter.Views
         // Lógica de login
         private void IniciarSesion()
         {
-            var usuario = TxtUsuario.Password != null ? TxtUsuario.Text.Trim() : TxtUsuario.Text.Trim();
+            var logFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "elite_login.log");
+            System.IO.File.AppendAllText(logFile, $"[{DateTime.Now}] IniciarSesion called\r\n");
+
+            // Inicializar base de datos ANTES del login
+            try
+            {
+                System.IO.File.AppendAllText(logFile, $"[{DateTime.Now}] Calling Initialize...\r\n");
+                DatabaseConnection.Initialize();
+                DatabaseConnection.InsertarDatosIniciales();
+                System.IO.File.AppendAllText(logFile, $"[{DateTime.Now}] Initialize complete\r\n");
+            }
+            catch (Exception ex)
+            {
+                System.IO.File.AppendAllText(logFile, $"[{DateTime.Now}] ERROR: {ex.Message}\r\n{ex.StackTrace}\r\n");
+                MessageBox.Show($"Error inicializando base de datos:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var usuario = TxtUsuario.Text.Trim();
             var contrasena = TxtContrasena.Password;
 
             // Validar campos vacíos

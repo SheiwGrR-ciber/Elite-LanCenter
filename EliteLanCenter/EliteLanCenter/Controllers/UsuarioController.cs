@@ -13,36 +13,49 @@ namespace EliteLanCenter.Controllers
         // Verificar credenciales al hacer login
         public static Usuario? Login(string userName, string contrasena)
         {
-            using var connection = DatabaseConnection.GetConnection();
-            using var command = connection.CreateCommand();
-
-            command.CommandText = @"
-                SELECT Id, Nombre, Usuario, Contrasena, Rol, Activo
-                FROM Usuarios
-                WHERE Usuario = @usuario 
-                AND Contrasena = @contrasena
-                AND Activo = 1
-            ";
-
-            command.Parameters.AddWithValue("@usuario", userName);
-            command.Parameters.AddWithValue("@contrasena", contrasena);
-
-            using var reader = command.ExecuteReader();
-
-            if (reader.Read())
+            try
             {
-                return new Usuario
-                {
-                    Id = reader.GetInt32(0),
-                    Nombre = reader.GetString(1),
-                    UserName = reader.GetString(2),
-                    Contrasena = reader.GetString(3),
-                    Rol = reader.GetString(4),
-                    Activo = reader.GetInt32(5) == 1
-                };
-            }
+                using var connection = DatabaseConnection.GetConnection();
+                using var command = connection.CreateCommand();
 
-            return null;
+                System.Diagnostics.Debug.WriteLine($"Intentando login con usuario: {userName}");
+
+                command.CommandText = @"
+                    SELECT Id, Nombre, Usuario, Contrasena, Rol, Activo
+                    FROM Usuarios
+                    WHERE Usuario = @usuario 
+                    AND Contrasena = @contrasena
+                    AND Activo = 1
+                ";
+
+                command.Parameters.AddWithValue("@usuario", userName);
+                command.Parameters.AddWithValue("@contrasena", contrasena);
+
+                using var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    System.Diagnostics.Debug.WriteLine("Login exitoso para: " + userName);
+                    return new Usuario
+                    {
+                        Id = reader.GetInt32(0),
+                        Nombre = reader.GetString(1),
+                        UserName = reader.GetString(2),
+                        Contrasena = reader.GetString(3),
+                        Rol = reader.GetString(4),
+                        Activo = reader.GetInt32(5) == 1
+                    };
+                }
+
+                System.Diagnostics.Debug.WriteLine("Login fallido - credenciales incorrectas");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("❌ Error en login: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack: " + ex.StackTrace);
+                return null;
+            }
         }
 
         // Obtener todos los usuarios
@@ -107,6 +120,47 @@ namespace EliteLanCenter.Controllers
 
                 command.ExecuteNonQuery();
                 return (true, "Usuario creado correctamente.");
+            }
+            catch (SqliteException ex) when (ex.Message.Contains("UNIQUE"))
+            {
+                return (false, "El nombre de usuario ya existe.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error: {ex.Message}");
+            }
+        }
+
+        // Actualizar usuario
+        public static (bool ok, string mensaje) Actualizar(int usuarioId, string nombre,
+                                                            string userName, string rol)
+        {
+            if (string.IsNullOrWhiteSpace(nombre))
+                return (false, "El nombre es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(userName))
+                return (false, "El usuario es obligatorio.");
+
+            try
+            {
+                using var connection = DatabaseConnection.GetConnection();
+                using var command = connection.CreateCommand();
+
+                command.CommandText = @"
+                    UPDATE Usuarios
+                    SET Nombre = @nombre,
+                        Usuario = @usuario,
+                        Rol = @rol
+                    WHERE Id = @id
+                ";
+
+                command.Parameters.AddWithValue("@nombre", nombre.Trim());
+                command.Parameters.AddWithValue("@usuario", userName.Trim());
+                command.Parameters.AddWithValue("@rol", rol);
+                command.Parameters.AddWithValue("@id", usuarioId);
+
+                command.ExecuteNonQuery();
+                return (true, "Usuario actualizado correctamente.");
             }
             catch (SqliteException ex) when (ex.Message.Contains("UNIQUE"))
             {

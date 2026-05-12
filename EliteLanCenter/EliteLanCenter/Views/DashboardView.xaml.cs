@@ -35,7 +35,7 @@ namespace EliteLanCenter.Views
             ActualizarFechaHora();
 
             // Cargar página inicial
-            NavegaryA("Dashboard");
+            NavegarA("Dashboard");
         }
 
         // ── Configurar usuario ─────────────────
@@ -103,28 +103,28 @@ namespace EliteLanCenter.Views
 
         // ── Botones del menú ───────────────────
         private void BtnDashboard_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Dashboard");
+            NavegarA("Dashboard");
 
         private void BtnVentas_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Ventas");
+            NavegarA("Ventas");
 
         private void BtnTurnos_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Turnos");
+            NavegarA("Turnos");
 
         private void BtnReportes_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Reportes");
+            NavegarA("Reportes");
 
         private void BtnCaseros_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Caseros");
+            NavegarA("Caseros");
 
         private void BtnInventario_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Inventario");
+            NavegarA("Inventario");
 
         private void BtnAdministracion_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Administracion");
+            NavegarA("Administracion");
 
         private void BtnEstadisticas_Click(object sender, RoutedEventArgs e) =>
-            NavegaryA("Estadisticas");
+            NavegarA("Estadisticas");
 
         // ── Cerrar sesión ──────────────────────
         private void BtnCerrarSesion_Click(object sender, RoutedEventArgs e)

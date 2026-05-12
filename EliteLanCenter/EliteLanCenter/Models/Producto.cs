@@ -2,6 +2,8 @@
 // ELITE LAN CENTER - MODELO DE PRODUCTO
 // =============================================
 
+using System.Windows.Media;
+
 namespace EliteLanCenter.Models
 {
     public class Producto
@@ -14,14 +16,10 @@ namespace EliteLanCenter.Models
         public bool Activo { get; set; } = true;
         public string CreadoEn { get; set; } = string.Empty;
 
-        // Stock en mostrador
         public int StockMostrador { get; set; }
-
-        // Stock en almacen
         public int PaquetesAlmacen { get; set; }
         public int UnidadesSueltas { get; set; }
 
-        // Propiedades calculadas
         public int TotalUnidadesAlmacen =>
             (PaquetesAlmacen * UnidadesPaquete) + UnidadesSueltas;
 
@@ -42,5 +40,8 @@ namespace EliteLanCenter.Models
 
         public string ValorTotalFormateado =>
             $"S/ {ValorTotal:F2}";
+
+        public Brush StockAlertaColor { get; set; } = Brushes.Transparent;
+        public Brush StockAlertaTexto { get; set; } = Brushes.White;
     }
 }

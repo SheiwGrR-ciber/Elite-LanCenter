@@ -18,11 +18,15 @@
 
             <!-- Fuentes personalizadas -->
             <FontFamily x:Key="MontserratFont">
-                pack://application:,,,/Assets/#Montserrat
+                pack://application:,,,/Assets/Montserrat-VariableFont_wght.ttf#Montserrat
             </FontFamily>
             <FontFamily x:Key="InterFont">
-                pack://application:,,,/Assets/#Inter
+                pack://application:,,,/Assets/Inter-VariableFont_opsz,wght.ttf#Inter
             </FontFamily>
+
+            <!-- Converters -->
+            <helpers:BoolToRFIDConverter x:Key="BoolToRFIDConverter"
+                                        xmlns:helpers="clr-namespace:EliteLanCenter.Helpers"/>
 
         </ResourceDictionary>
     </Application.Resources>

@@ -58,8 +58,7 @@
                        FontWeight="SemiBold"
                        Foreground="#8892B0"
                        HorizontalAlignment="Center"
-                       Margin="0 0 0 8"
-                       LetterSpacing="4"/>
+                       Margin="0 0 0 8"/>
 
             <TextBlock Text="Sistema de Gestión Administrativa"
                        FontSize="12"

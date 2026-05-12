@@ -44,8 +44,7 @@
                                            FontFamily="{StaticResource MontserratFont}"
                                            FontSize="9"
                                            Foreground="#8892B0"
-                                           HorizontalAlignment="Center"
-                                           LetterSpacing="3"/>
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
@@ -74,8 +73,7 @@
                                FontSize="10"
                                FontWeight="Bold"
                                Foreground="#2D3250"
-                               Margin="8 0 0 8"
-                               LetterSpacing="2"/>
+                               Margin="8 0 0 8"/>
 
                     <!-- Dashboard -->
                     <Button x:Name="BtnDashboard"
@@ -134,13 +132,12 @@
 
                     <!-- Solo Admin -->
                     <TextBlock x:Name="LblMenuAdmin"
-                               Text="ADMINISTRACIÓN"
-                               FontSize="10"
-                               FontWeight="Bold"
-                               Foreground="#2D3250"
-                               Margin="8 16 0 8"
-                               LetterSpacing="2"
-                               Visibility="Collapsed"/>
+                                Text="ADMINISTRACIÓN"
+                                FontSize="10"
+                                FontWeight="Bold"
+                                Foreground="#2D3250"
+                                Margin="8 16 0 8"
+                                Visibility="Collapsed"/>
 
                     <Button x:Name="BtnInventario"
                             Click="BtnInventario_Click"

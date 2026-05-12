@@ -265,7 +265,7 @@ namespace EliteLanCenter.Controllers
                 WHERE p.Activo = 1
             ";
 
-            return (double)(command.ExecuteScalar() ?? 0.0);
+            return Convert.ToDouble(command.ExecuteScalar() ?? 0.0);
         }
     }
 }
