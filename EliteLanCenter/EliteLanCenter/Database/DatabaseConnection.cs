@@ -122,6 +122,7 @@ namespace EliteLanCenter.Database
                             Total REAL NOT NULL,
                             Fiado INTEGER DEFAULT 0,
                             FiadoPagado INTEGER DEFAULT 0,
+                            NumeroPc TEXT,
                             CreadoEn TEXT DEFAULT (datetime('now', 'localtime'))
                         );
                         CREATE TABLE IF NOT EXISTS Caseros (
@@ -151,6 +152,15 @@ namespace EliteLanCenter.Database
                             UsuarioId INTEGER REFERENCES Usuarios(Id),
                             CreadoEn TEXT DEFAULT (datetime('now', 'localtime'))
                         );
+                        CREATE TABLE IF NOT EXISTS IngresosMercaderia (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            ProductoId INTEGER NOT NULL REFERENCES Productos(Id),
+                            Cantidad INTEGER NOT NULL,
+                            EsPaquete INTEGER DEFAULT 1,
+                            CostoTotal REAL NOT NULL,
+                            RegistradoPor INTEGER REFERENCES Usuarios(Id),
+                            CreadoEn TEXT DEFAULT (datetime('now', 'localtime'))
+                        );
                         CREATE TABLE IF NOT EXISTS Reportes (
                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                             TurnoId INTEGER NOT NULL REFERENCES Turnos(Id),
@@ -169,6 +179,13 @@ namespace EliteLanCenter.Database
                         )";
                     command.ExecuteNonQuery();
                     File.AppendAllText(logFile, $"[{DateTime.Now}] Other tables created\r\n");
+                }
+
+                // Migraciones para tablas existentes
+                using (var migrar = connection.CreateCommand())
+                {
+                    migrar.CommandText = "ALTER TABLE Ventas ADD COLUMN NumeroPc TEXT";
+                    try { migrar.ExecuteNonQuery(); File.AppendAllText(logFile, $"[{DateTime.Now}] Migrated Ventas: added NumeroPc\r\n"); } catch { }
                 }
 
                 File.AppendAllText(logFile, $"[{DateTime.Now}] DB init complete\r\n");

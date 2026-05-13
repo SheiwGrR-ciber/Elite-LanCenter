@@ -11,7 +11,7 @@ namespace EliteLanCenter.Controllers
     {
         // Registrar una venta
         public static (bool ok, string mensaje, double total) RegistrarVenta(
-            int turnoId, int productoId, int cantidad, bool fiado = false)
+            int turnoId, int productoId, int cantidad, bool fiado = false, string? numeroPc = null)
         {
             // Obtener producto
             var producto = ProductoController.ObtenerPorId(productoId);
@@ -30,8 +30,8 @@ namespace EliteLanCenter.Controllers
                 using var command = connection.CreateCommand();
 
                 command.CommandText = @"
-                    INSERT INTO Ventas (TurnoId, ProductoId, Cantidad, PrecioUnit, Total, Fiado, FiadoPagado)
-                    VALUES (@turnoId, @productoId, @cantidad, @precioUnit, @total, @fiado, 0)
+                    INSERT INTO Ventas (TurnoId, ProductoId, Cantidad, PrecioUnit, Total, Fiado, FiadoPagado, NumeroPc)
+                    VALUES (@turnoId, @productoId, @cantidad, @precioUnit, @total, @fiado, 0, @numeroPc)
                 ";
 
                 command.Parameters.AddWithValue("@turnoId", turnoId);
@@ -40,6 +40,7 @@ namespace EliteLanCenter.Controllers
                 command.Parameters.AddWithValue("@precioUnit", producto.PrecioUnidad);
                 command.Parameters.AddWithValue("@total", total);
                 command.Parameters.AddWithValue("@fiado", fiado ? 1 : 0);
+                command.Parameters.AddWithValue("@numeroPc", numeroPc ?? (object)DBNull.Value);
 
                 command.ExecuteNonQuery();
 
@@ -67,7 +68,7 @@ namespace EliteLanCenter.Controllers
                 SELECT 
                     v.Id, v.TurnoId, v.ProductoId, p.Nombre,
                     v.Cantidad, v.PrecioUnit, v.Total,
-                    v.Fiado, v.FiadoPagado, v.CreadoEn
+                    v.Fiado, v.FiadoPagado, v.NumeroPc, v.CreadoEn
                 FROM Ventas v
                 JOIN Productos p ON p.Id = v.ProductoId
                 WHERE v.TurnoId = @turnoId
@@ -91,7 +92,8 @@ namespace EliteLanCenter.Controllers
                     Total = reader.GetDouble(6),
                     Fiado = reader.GetInt32(7) == 1,
                     FiadoPagado = reader.GetInt32(8) == 1,
-                    CreadoEn = reader.GetString(9)
+                    NumeroPc = reader.IsDBNull(9) ? null : reader.GetString(9),
+                    CreadoEn = reader.GetString(10)
                 });
             }
 
@@ -112,7 +114,7 @@ namespace EliteLanCenter.Controllers
             ";
 
             command.Parameters.AddWithValue("@turnoId", turnoId);
-            return (double)(command.ExecuteScalar() ?? 0.0);
+            return Convert.ToDouble(command.ExecuteScalar() ?? 0.0);
         }
 
         // Obtener ventas del dia completo
@@ -130,7 +132,7 @@ namespace EliteLanCenter.Controllers
             ";
 
             command.Parameters.AddWithValue("@fecha", fecha);
-            return (double)(command.ExecuteScalar() ?? 0.0);
+            return Convert.ToDouble(command.ExecuteScalar() ?? 0.0);
         }
 
         // Obtener fiados pendientes del turno
@@ -145,7 +147,7 @@ namespace EliteLanCenter.Controllers
                 SELECT 
                     v.Id, v.TurnoId, v.ProductoId, p.Nombre,
                     v.Cantidad, v.PrecioUnit, v.Total,
-                    v.Fiado, v.FiadoPagado, v.CreadoEn
+                    v.Fiado, v.FiadoPagado, v.NumeroPc, v.CreadoEn
                 FROM Ventas v
                 JOIN Productos p ON p.Id = v.ProductoId
                 WHERE v.TurnoId = @turnoId
@@ -170,7 +172,8 @@ namespace EliteLanCenter.Controllers
                     Total = reader.GetDouble(6),
                     Fiado = reader.GetInt32(7) == 1,
                     FiadoPagado = reader.GetInt32(8) == 1,
-                    CreadoEn = reader.GetString(9)
+                    NumeroPc = reader.IsDBNull(9) ? null : reader.GetString(9),
+                    CreadoEn = reader.GetString(10)
                 });
             }
 

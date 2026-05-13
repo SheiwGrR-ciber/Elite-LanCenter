@@ -15,6 +15,7 @@ namespace EliteLanCenter.Models
         public double Total { get; set; }
         public bool Fiado { get; set; } = false;
         public bool FiadoPagado { get; set; } = false;
+        public string? NumeroPc { get; set; }
         public string CreadoEn { get; set; } = string.Empty;
 
         // Propiedades calculadas
@@ -39,5 +40,8 @@ namespace EliteLanCenter.Models
         }
 
         public bool EsFiadoPendiente => Fiado && !FiadoPagado;
+
+        public string NumeroPcDisplay =>
+            string.IsNullOrWhiteSpace(NumeroPc) ? "" : $"PC #{NumeroPc}";
     }
 }

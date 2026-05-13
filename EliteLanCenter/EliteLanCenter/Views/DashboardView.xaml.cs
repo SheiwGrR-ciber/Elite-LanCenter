@@ -3,6 +3,7 @@
 // =============================================
 
 using EliteLanCenter.Controllers;
+using EliteLanCenter.Helpers;
 using EliteLanCenter.Models;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,9 +34,10 @@ namespace EliteLanCenter.Views
             // Configurar UI
             ConfigurarUsuario();
             ActualizarFechaHora();
+            ActualizarBotonTema();
 
             // Cargar página inicial
-            NavegarA("Dashboard");
+            NavegarA("Casa");
         }
 
         // ── Configurar usuario ─────────────────
@@ -74,7 +76,7 @@ namespace EliteLanCenter.Views
 
             switch (pagina)
             {
-                case "Dashboard":
+                case "Casa":
                     MainFrame.Navigate(new Pages.DashboardPage(_usuario));
                     break;
                 case "Ventas":
@@ -103,7 +105,7 @@ namespace EliteLanCenter.Views
 
         // ── Botones del menú ───────────────────
         private void BtnDashboard_Click(object sender, RoutedEventArgs e) =>
-            NavegarA("Dashboard");
+            NavegarA("Casa");
 
         private void BtnVentas_Click(object sender, RoutedEventArgs e) =>
             NavegarA("Ventas");
@@ -125,6 +127,27 @@ namespace EliteLanCenter.Views
 
         private void BtnEstadisticas_Click(object sender, RoutedEventArgs e) =>
             NavegarA("Estadisticas");
+
+        // ── Toggle tema ─────────────────────────
+        private void BtnToggleTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeManager.ToggleTheme();
+            ActualizarBotonTema();
+        }
+
+        private void ActualizarBotonTema()
+        {
+            if (ThemeManager.IsDarkMode)
+            {
+                IconoTema.Text = "🌙";
+                TextoTema.Text = "Modo Oscuro";
+            }
+            else
+            {
+                IconoTema.Text = "☀️";
+                TextoTema.Text = "Modo Claro";
+            }
+        }
 
         // ── Cerrar sesión ──────────────────────
         private void BtnCerrarSesion_Click(object sender, RoutedEventArgs e)

@@ -247,6 +247,90 @@ namespace EliteLanCenter.Controllers
             command.ExecuteNonQuery();
         }
 
+        // Ingresar mercadería al almacén
+        public static (bool ok, string mensaje) IngresarMercaderia(
+            int productoId, int paquetes, int unidadesSueltas,
+            double costoTotal, int usuarioId)
+        {
+            if (paquetes < 0 || unidadesSueltas < 0)
+                return (false, "Las cantidades no pueden ser negativas.");
+
+            if (paquetes == 0 && unidadesSueltas == 0)
+                return (false, "Debes ingresar al menos 1 paquete o unidad suelta.");
+
+            if (costoTotal < 0)
+                return (false, "El costo total no puede ser negativo.");
+
+            try
+            {
+                using var connection = DatabaseConnection.GetConnection();
+                using var command = connection.CreateCommand();
+
+                // Obtener stock actual
+                command.CommandText = @"
+                    SELECT Paquetes, UnidadesSueltas
+                    FROM StockAlmacen
+                    WHERE ProductoId = @productoId
+                ";
+                command.Parameters.AddWithValue("@productoId", productoId);
+
+                int paqActual = 0, undActual = 0;
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        paqActual = reader.GetInt32(0);
+                        undActual = reader.GetInt32(1);
+                    }
+                }
+
+                var nuevoPaquetes = paqActual + paquetes;
+                var nuevoUnidades = undActual + unidadesSueltas;
+
+                // Actualizar stock almacén
+                command.CommandText = @"
+                    UPDATE StockAlmacen
+                    SET Paquetes = @paquetes,
+                        UnidadesSueltas = @unidadesSueltas,
+                        ActualizadoEn = datetime('now', 'localtime')
+                    WHERE ProductoId = @productoId
+                ";
+                command.Parameters.AddWithValue("@paquetes", nuevoPaquetes);
+                command.Parameters.AddWithValue("@unidadesSueltas", nuevoUnidades);
+                command.ExecuteNonQuery();
+
+                // Registrar ingreso
+                command.CommandText = @"
+                    INSERT INTO IngresosMercaderia (ProductoId, Cantidad, EsPaquete, CostoTotal, RegistradoPor)
+                    VALUES (@pid, @cant, @esPaq, @costo, @uid)
+                ";
+                command.Parameters.AddWithValue("@pid", productoId);
+                command.Parameters.AddWithValue("@uid", usuarioId);
+
+                if (paquetes > 0)
+                {
+                    command.Parameters.AddWithValue("@cant", paquetes);
+                    command.Parameters.AddWithValue("@esPaq", 1);
+                    command.Parameters.AddWithValue("@costo", Math.Round(costoTotal * paquetes / (paquetes + unidadesSueltas), 2));
+                    command.ExecuteNonQuery();
+                }
+
+                if (unidadesSueltas > 0)
+                {
+                    command.Parameters.AddWithValue("@cant", unidadesSueltas);
+                    command.Parameters.AddWithValue("@esPaq", 0);
+                    command.Parameters.AddWithValue("@costo", Math.Round(costoTotal * unidadesSueltas / (paquetes + unidadesSueltas), 2));
+                    command.ExecuteNonQuery();
+                }
+
+                return (true, $"Ingreso registrado: {paquetes} paquete(s) y {unidadesSueltas} unidad(es) suelta(s).");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error al ingresar mercadería: {ex.Message}");
+            }
+        }
+
         // Calcular valor total del inventario
         public static double CalcularValorTotalInventario()
         {

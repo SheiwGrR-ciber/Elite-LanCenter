@@ -1,7 +1,7 @@
 ﻿<Page x:Class="EliteLanCenter.Pages.DashboardPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Background="#111827"
+      Background="{DynamicResource BgPrincipalBrush}"
       FontFamily="{StaticResource InterFont}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -30,7 +30,7 @@
                         <TextBlock x:Name="LblInfoTurno"
                                    Text="Abre un turno para comenzar"
                                    FontSize="12"
-                                   Foreground="#8892B0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
                                    Margin="0 4 0 0"/>
                     </StackPanel>
 
@@ -42,8 +42,8 @@
                                   Width="120"
                                   Height="36"
                                   Margin="0 0 8 0"
-                                  Background="#2D3250"
-                                  Foreground="#E8EAF6"
+                                  Background="{DynamicResource BgCardBrush}"
+                                  Foreground="{DynamicResource TextPrimaryBrush}"
                                   BorderBrush="#2D3250">
                             <ComboBoxItem Content="Mañana"/>
                             <ComboBoxItem Content="Tarde"/>
@@ -92,7 +92,7 @@
                                    Margin="0 0 0 8"/>
                         <TextBlock Text="Ventas del Turno"
                                    FontSize="11"
-                                   Foreground="#8892B0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBlock x:Name="LblVentasTurno"
                                    Text="S/ 0.00"
                                    FontFamily="{StaticResource MontserratFont}"
@@ -120,7 +120,7 @@
                                    Margin="0 0 0 8"/>
                         <TextBlock Text="Valor Inventario"
                                    FontSize="11"
-                                   Foreground="#8892B0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBlock x:Name="LblValorInventario"
                                    Text="S/ 0.00"
                                    FontFamily="{StaticResource MontserratFont}"
@@ -148,7 +148,7 @@
                                    Margin="0 0 0 8"/>
                         <TextBlock Text="Turno Activo"
                                    FontSize="11"
-                                   Foreground="#8892B0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBlock x:Name="LblTurnoActivo"
                                    Text="Ninguno"
                                    FontFamily="{StaticResource MontserratFont}"
@@ -176,7 +176,7 @@
                                    Margin="0 0 0 8"/>
                         <TextBlock Text="Caseros Activos"
                                    FontSize="11"
-                                   Foreground="#8892B0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBlock x:Name="LblCaserosActivos"
                                    Text="0"
                                    FontFamily="{StaticResource MontserratFont}"
@@ -223,7 +223,7 @@
                                    Margin="0 8 0 0"/>
                         <TextBlock Text="Registra los productos vendidos"
                                    FontSize="11"
-                                   Foreground="#8892B0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    Margin="0 4 0 0"/>
@@ -251,7 +251,7 @@
                                    Margin="0 8 0 0"/>
                         <TextBlock Text="Verifica el stock y cierra turno"
                                    FontSize="11"
-                                   Foreground="#8892B0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    Margin="0 4 0 0"/>
@@ -279,7 +279,7 @@
                                    Margin="0 8 0 0"/>
                         <TextBlock Text="Genera el PDF del turno"
                                    FontSize="11"
-                                   Foreground="#8892B0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    Margin="0 4 0 0"/>

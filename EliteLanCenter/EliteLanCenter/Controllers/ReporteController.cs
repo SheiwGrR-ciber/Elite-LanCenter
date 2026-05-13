@@ -287,6 +287,99 @@ namespace EliteLanCenter.Controllers
             return productos;
         }
 
+        // Obtener ventas diarias detalladas (productos + máquinas)
+        public static List<(string fecha, double maquinas, double productos, double yape, double descuentos, double liquido, double efectivo, int transacciones, int totalProductosVendidos)>
+            ObtenerVentasDiariasDetalle(string fechaInicio, string fechaFin)
+        {
+            var lista = new List<(string, double, double, double, double, double, double, int, int)>();
+
+            using var connection = DatabaseConnection.GetConnection();
+            using var command = connection.CreateCommand();
+
+            command.CommandText = @"
+                SELECT 
+                    t.Fecha,
+                    COALESCE(SUM(r.IngresoMaquinas), 0) AS Maquinas,
+                    COALESCE(SUM(r.TotalProductos), 0) AS Productos,
+                    COALESCE(SUM(r.MontoYape), 0) AS Yape,
+                    COALESCE(SUM(r.Descuentos), 0) AS Descuentos,
+                    COALESCE(SUM(r.TotalLiquido), 0) AS Liquido,
+                    COALESCE(SUM(r.Efectivo), 0) AS Efectivo,
+                    COUNT(r.Id) AS Transacciones,
+                    COALESCE((SELECT SUM(v.Cantidad) FROM Ventas v JOIN Turnos t2 ON t2.Id = v.TurnoId WHERE t2.Fecha = t.Fecha), 0) AS TotalProdVendidos
+                FROM Turnos t
+                LEFT JOIN Reportes r ON r.TurnoId = t.Id
+                WHERE t.Fecha BETWEEN @inicio AND @fin
+                GROUP BY t.Fecha
+                ORDER BY t.Fecha ASC
+            ";
+
+            command.Parameters.AddWithValue("@inicio", fechaInicio);
+            command.Parameters.AddWithValue("@fin", fechaFin);
+
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                lista.Add((
+                    reader.GetString(0),
+                    reader.GetDouble(1),
+                    reader.GetDouble(2),
+                    reader.GetDouble(3),
+                    reader.GetDouble(4),
+                    reader.GetDouble(5),
+                    reader.GetDouble(6),
+                    reader.GetInt32(7),
+                    reader.GetInt32(8)
+                ));
+            }
+
+            return lista;
+        }
+
+        // Obtener resumen global del período
+        public static (double totalMaquinas, double totalProductos, double totalYape, double totalDescuentos, double totalLiquido, double totalEfectivo, int totalTransacciones, int totalDias) 
+            ObtenerResumenGlobal(string fechaInicio, string fechaFin)
+        {
+            using var connection = DatabaseConnection.GetConnection();
+            using var command = connection.CreateCommand();
+
+            command.CommandText = @"
+                SELECT 
+                    COALESCE(SUM(r.IngresoMaquinas), 0),
+                    COALESCE(SUM(r.TotalProductos), 0),
+                    COALESCE(SUM(r.MontoYape), 0),
+                    COALESCE(SUM(r.Descuentos), 0),
+                    COALESCE(SUM(r.TotalLiquido), 0),
+                    COALESCE(SUM(r.Efectivo), 0),
+                    COUNT(r.Id),
+                    COUNT(DISTINCT t.Fecha)
+                FROM Turnos t
+                LEFT JOIN Reportes r ON r.TurnoId = t.Id
+                WHERE t.Fecha BETWEEN @inicio AND @fin
+            ";
+
+            command.Parameters.AddWithValue("@inicio", fechaInicio);
+            command.Parameters.AddWithValue("@fin", fechaFin);
+
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                return (
+                    reader.GetDouble(0),
+                    reader.GetDouble(1),
+                    reader.GetDouble(2),
+                    reader.GetDouble(3),
+                    reader.GetDouble(4),
+                    reader.GetDouble(5),
+                    reader.GetInt32(6),
+                    reader.GetInt32(7)
+                );
+            }
+
+            return (0, 0, 0, 0, 0, 0, 0, 0);
+        }
+
         // Mapear reporte desde reader
         private static Reporte MapearReporte(Microsoft.Data.Sqlite.SqliteDataReader reader)
         {

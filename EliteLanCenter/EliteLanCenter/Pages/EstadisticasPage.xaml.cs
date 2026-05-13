@@ -1,13 +1,7 @@
-// =============================================
-// ELITE LAN CENTER - ESTADISTICAS PAGE
-// =============================================
-
+using ClosedXML.Excel;
 using EliteLanCenter.Controllers;
 using EliteLanCenter.Models;
-using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
+using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,220 +9,350 @@ namespace EliteLanCenter.Pages
 {
     public partial class EstadisticasPage : Page
     {
-        private int _diasSeleccionados = 7;
-
         public EstadisticasPage(Usuario? usuario = null)
         {
             InitializeComponent();
-            CargarEstadisticas();
+
+            DateDesde.SelectedDate = DateTime.Today.AddDays(-7);
+            DateHasta.SelectedDate = DateTime.Today;
         }
 
-        private void BtnFiltro_Click(object sender, RoutedEventArgs e)
+        private void BtnPreset_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag != null)
             {
-                _diasSeleccionados = btn.Tag.ToString() switch
+                var tag = btn.Tag.ToString();
+                DateDesde.SelectedDate = tag switch
                 {
-                    "7" => 7,
-                    "30" => 30,
-                    "mes" => DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month),
-                    _ => 7
+                    "7" => DateTime.Today.AddDays(-7),
+                    "30" => DateTime.Today.AddDays(-30),
+                    "mes" => new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+                    _ => DateTime.Today.AddDays(-7)
                 };
-
-                Btn7Dias.Style = _diasSeleccionados == 7 ? (Style)FindResource("AccentButton") : (Style)FindResource("PrimaryButton");
-                Btn30Dias.Style = _diasSeleccionados == 30 ? (Style)FindResource("AccentButton") : (Style)FindResource("PrimaryButton");
-                BtnEsteMes.Style = _diasSeleccionados == DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) ? (Style)FindResource("AccentButton") : (Style)FindResource("PrimaryButton");
-
-                CargarEstadisticas();
+                DateHasta.SelectedDate = DateTime.Today;
             }
         }
 
-        private void CargarEstadisticas()
+        private async void BtnGenerarExcel_Click(object sender, RoutedEventArgs e)
         {
-            LblPeriodo.Text = _diasSeleccionados switch
+            var desde = DateDesde.SelectedDate;
+            var hasta = DateHasta.SelectedDate;
+
+            if (desde == null || hasta == null)
             {
-                7 => "Datos de los últimos 7 días",
-                30 => "Datos de los últimos 30 días",
-                _ => $"Datos del mes ({_diasSeleccionados} días)"
-            };
-
-            var fechaInicio = DateTime.Now.AddDays(-_diasSeleccionados).ToString("yyyy-MM-dd");
-            var fechaFin = DateTime.Now.ToString("yyyy-MM-dd");
-
-            CargarResumenGeneral(fechaInicio, fechaFin);
-            CargarGraficoVentasDiarias(fechaInicio, fechaFin);
-            CargarGraficoTurnos(fechaInicio, fechaFin);
-            CargarGraficoProductos(fechaInicio, fechaFin);
-            CargarDetalleDias(fechaInicio, fechaFin);
-        }
-
-        private void CargarResumenGeneral(string fechaInicio, string fechaFin)
-        {
-            var reportes = ReporteController.ObtenerEstadisticasSemana(fechaInicio, fechaFin);
-
-            double totalVentas = reportes.Sum(r => r.maquinas + r.productos);
-            double totalYape = reportes.Sum(r => r.yape);
-            double totalMaquinas = reportes.Sum(r => r.maquinas);
-            double totalDescuentos = reportes.Sum(r => r.descuentos);
-            double totalLiquido = reportes.Sum(r => r.liquido);
-            double totalEfectivo = reportes.Sum(r => r.efectivo);
-            int totalTransacciones = reportes.Sum(r => r.transacciones);
-
-            LblVentasTotales.Text = $"S/ {totalVentas:F2}";
-            LblTransacciones.Text = totalTransacciones.ToString();
-            LblYapeTotal.Text = $"S/ {totalYape:F2}";
-            LblMaquinasTotal.Text = $"S/ {totalMaquinas:F2}";
-            LblEfectivoTotal.Text = $"S/ {totalEfectivo:F2}";
-            LblDescuentosTotal.Text = $"S/ {totalDescuentos:F2}";
-            LblLiquidoTotal.Text = $"S/ {totalLiquido:F2}";
-        }
-
-        private void CargarGraficoVentasDiarias(string fechaInicio, string fechaFin)
-        {
-            var reportes = ReporteController.ObtenerEstadisticasSemana(fechaInicio, fechaFin);
-
-            var valores = reportes.Select(r => r.maquinas + r.productos).ToArray();
-            var etiquetas = reportes.Select(r => FormatearFecha(r.fecha)).ToArray();
-
-            GraficoVentasDiarias.Series = new ISeries[]
-            {
-                new ColumnSeries<double>
-                {
-                    Values = valores,
-                    Fill = new SolidColorPaint(SKColor.Parse("#01EFAC")),
-                    Stroke = null,
-                    MaxBarWidth = 30
-                }
-            };
-
-            GraficoVentasDiarias.XAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Labels = etiquetas,
-                    LabelsPaint = new SolidColorPaint(SKColor.Parse("#8892B0")),
-                    TextSize = 10
-                }
-            };
-
-            GraficoVentasDiarias.YAxes = new Axis[]
-            {
-                new Axis
-                {
-                    LabelsPaint = new SolidColorPaint(SKColor.Parse("#8892B0")),
-                    TextSize = 10,
-                    Labeler = value => $"S/ {value:F0}"
-                }
-            };
-        }
-
-        private void CargarGraficoTurnos(string fechaInicio, string fechaFin)
-        {
-            var reportes = ReporteController.ObtenerEstadisticasPorTurno(fechaInicio, fechaFin);
-
-            var colores = new[]
-            {
-                SKColor.Parse("#524094"),
-                SKColor.Parse("#2082A6"),
-                SKColor.Parse("#F59E0B")
-            };
-
-            GraficoTurnos.Series = new ISeries[]
-            {
-                new PieSeries<double>
-                {
-                    Values = new double[] { reportes.manna },
-                    Name = "Mañana",
-                    Fill = new SolidColorPaint(colores[0])
-                },
-                new PieSeries<double>
-                {
-                    Values = new double[] { reportes.tarde },
-                    Name = "Tarde",
-                    Fill = new SolidColorPaint(colores[1])
-                },
-                new PieSeries<double>
-                {
-                    Values = new double[] { reportes.noche },
-                    Name = "Noche",
-                    Fill = new SolidColorPaint(colores[2])
-                }
-            };
-        }
-
-        private void CargarGraficoProductos(string fechaInicio, string fechaFin)
-        {
-            var productos = ReporteController.ObtenerProductosMasVendidos(fechaInicio, fechaFin, 5);
-
-            if (productos.Count == 0)
-            {
-                GraficoProductos.Series = new ISeries[]
-                {
-                    new ColumnSeries<double>
-                    {
-                        Values = new double[] { 0 },
-                        Fill = new SolidColorPaint(SKColor.Parse("#2D3250"))
-                    }
-                };
+                MessageBox.Show("Selecciona las fechas de inicio y fin.",
+                    "Fechas requeridas", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var valores = productos.Select(p => (double)p.total).ToArray();
-            var etiquetas = productos.Select(p => p.nombre.Length > 10 ? p.nombre.Substring(0, 10) + "..." : p.nombre).ToArray();
-
-            GraficoProductos.Series = new ISeries[]
+            if (desde > hasta)
             {
-                new RowSeries<double>
-                {
-                    Values = valores,
-                    Fill = new SolidColorPaint(SKColor.Parse("#524094")),
-                    Stroke = null,
-                    MaxBarWidth = 30
-                }
+                MessageBox.Show("La fecha de inicio no puede ser mayor a la fecha de fin.",
+                    "Rango inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var saveDialog = new SaveFileDialog
+            {
+                Title = "Guardar Reporte Estadístico",
+                Filter = "Archivo Excel (*.xlsx)|*.xlsx",
+                FileName = $"Reporte_Estadistico_{desde:yyyyMMdd}_{hasta:yyyyMMdd}.xlsx"
             };
 
-            GraficoProductos.XAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Labels = valores.Select(v => $"S/ {v:F0}").ToArray(),
-                    LabelsPaint = new SolidColorPaint(SKColor.Parse("#8892B0")),
-                    TextSize = 10
-                }
-            };
+            if (saveDialog.ShowDialog() != true)
+                return;
 
-            GraficoProductos.YAxes = new Axis[]
+            BtnGenerarExcel.IsEnabled = false;
+            BtnGenerarExcel.Content = "⏳ Generando...";
+            LblInfo.Text = "Generando reporte...";
+
+            try
             {
-                new Axis
+                var filePath = saveDialog.FileName;
+                await Task.Run(() => GenerarExcel(filePath, desde.Value, hasta.Value));
+
+                LblInfo.Text = $"✅ Reporte guardado en:\n{filePath}";
+
+                var abrir = MessageBox.Show(
+                    "Reporte generado correctamente. ¿Deseas abrir el archivo?",
+                    "Reporte Listo",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (abrir == MessageBoxResult.Yes)
                 {
-                    Labels = etiquetas,
-                    LabelsPaint = new SolidColorPaint(SKColor.Parse("#8892B0")),
-                    TextSize = 10
+                    var psi = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = filePath,
+                        UseShellExecute = true
+                    };
+                    System.Diagnostics.Process.Start(psi);
                 }
-            };
+            }
+            catch (Exception ex)
+            {
+                LblInfo.Text = $"❌ Error: {ex.Message}";
+                MessageBox.Show($"Error al generar el reporte:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                BtnGenerarExcel.IsEnabled = true;
+                BtnGenerarExcel.Content = "📥 Generar Excel";
+            }
         }
 
-        private void CargarDetalleDias(string fechaInicio, string fechaFin)
+        private void GenerarExcel(string filePath, DateTime desde, DateTime hasta)
         {
-            var reportes = ReporteController.ObtenerEstadisticasSemana(fechaInicio, fechaFin);
+            var fechaInicio = desde.ToString("yyyy-MM-dd");
+            var fechaFin = hasta.ToString("yyyy-MM-dd");
 
-            var detalle = reportes.Select(r => new
+            var resumen = ReporteController.ObtenerResumenGlobal(fechaInicio, fechaFin);
+            var diarias = ReporteController.ObtenerVentasDiariasDetalle(fechaInicio, fechaFin);
+            var productos = ReporteController.ObtenerProductosMasVendidos(fechaInicio, fechaFin, 50);
+            var turnos = ReporteController.ObtenerEstadisticasPorTurno(fechaInicio, fechaFin);
+
+            using var workbook = new XLWorkbook();
+
+            CrearHojaResumen(workbook, resumen, desde, hasta);
+            CrearHojaVentasDiarias(workbook, diarias);
+            CrearHojaProductos(workbook, productos);
+            CrearHojaTurnos(workbook, turnos);
+            CrearHojaTopDias(workbook, diarias);
+            CrearHojatendencia(workbook, diarias);
+            CrearHojaDiaSemana(workbook, diarias);
+
+            workbook.SaveAs(filePath);
+
+            var totalProdVendidos = diarias.Sum(d => d.totalProductosVendidos);
+            Dispatcher.Invoke(() => MostrarResumen(resumen, totalProdVendidos));
+        }
+
+        private static void CrearHojaResumen(XLWorkbook wb,
+            (double totalMaquinas, double totalProductos, double totalYape, double totalDescuentos, double totalLiquido, double totalEfectivo, int totalTransacciones, int totalDias) resumen,
+            DateTime desde, DateTime hasta)
+        {
+            var ws = wb.Worksheets.Add("Resumen General");
+            var c = new Celda(ws);
+
+            c.Escribir(1, 1, "REPORTE ESTADÍSTICO - ELITE LAN CENTER", true, 16);
+            c.Escribir(2, 1, $"Período: {desde:dd/MM/yyyy} - {hasta:dd/MM/yyyy}", false, 12);
+
+            ws.Cell(4, 1).InsertTable(new[]
             {
-                Fecha = FormatearFecha(r.fecha),
-                Ventas = $"S/ {(r.maquinas + r.productos):F2}",
-                Transacciones = $"{r.transacciones} ventas"
+                new { Indicador = "💰 Ingreso Máquinas",     Valor = $"S/ {resumen.totalMaquinas:F2}" },
+                new { Indicador = "🛒 Venta Productos",        Valor = $"S/ {resumen.totalProductos:F2}" },
+                new { Indicador = "💳 Yape / Transferencia",   Valor = $"S/ {resumen.totalYape:F2}" },
+                new { Indicador = "🧾 Efectivo",               Valor = $"S/ {resumen.totalEfectivo:F2}" },
+                new { Indicador = "📉 Descuentos",             Valor = $"S/ {resumen.totalDescuentos:F2}" },
+                new { Indicador = "🏆 Total Líquido",           Valor = $"S/ {resumen.totalLiquido:F2}" },
+                new { Indicador = "📊 Transacciones",          Valor = resumen.totalTransacciones.ToString() },
+                new { Indicador = "📅 Días con reportes",     Valor = resumen.totalDias.ToString() },
+            }, "ELITE");
+
+            ws.Columns().AdjustToContents();
+            ws.Column(1).Width = 35;
+            ws.Column(2).Width = 25;
+        }
+
+        private static void CrearHojaVentasDiarias(XLWorkbook wb,
+            List<(string fecha, double maquinas, double productos, double yape, double descuentos, double liquido, double efectivo, int transacciones, int totalProductosVendidos)> diarias)
+        {
+            var ws = wb.Worksheets.Add("Ventas Diarias");
+            var c = new Celda(ws);
+
+            c.Escribir(1, 1, "VENTAS DIARIAS", true, 14);
+
+            var datos = diarias.Select(d => new
+            {
+                Fecha = d.fecha,
+                Máquinas = $"S/ {d.maquinas:F2}",
+                Productos = $"S/ {d.productos:F2}",
+                Total_Día = $"S/ {d.maquinas + d.productos:F2}",
+                Yape = $"S/ {d.yape:F2}",
+                Efectivo = $"S/ {d.efectivo:F2}",
+                Descuentos = $"S/ {d.descuentos:F2}",
+                Líquido = $"S/ {d.liquido:F2}",
+                Transacciones = d.transacciones,
+                Prod_Vendidos = d.totalProductosVendidos
             }).ToList();
 
-            ListaDias.ItemsSource = detalle;
+            if (datos.Count > 0)
+                ws.Cell(3, 1).InsertTable(datos, "Días");
+
+            ws.Columns().AdjustToContents();
         }
 
-        private string FormatearFecha(string fecha)
+        private static void CrearHojaProductos(XLWorkbook wb,
+            List<(string nombre, int cantidad, double total)> productos)
         {
-            if (DateTime.TryParse(fecha, out var fechaDate))
+            var ws = wb.Worksheets.Add("Productos Vendidos");
+            var c = new Celda(ws);
+
+            c.Escribir(1, 1, "PRODUCTOS MÁS VENDIDOS", true, 14);
+
+            var datos = productos.Select((p, i) => new
             {
-                return fechaDate.ToString("dd MMM");
+                Posición = i + 1,
+                Producto = p.nombre,
+                Cantidad = p.cantidad,
+                Total = $"S/ {p.total:F2}"
+            }).ToList();
+
+            if (datos.Count > 0)
+                ws.Cell(3, 1).InsertTable(datos, "Productos");
+
+            ws.Columns().AdjustToContents();
+            ws.Column(1).Width = 10;
+            ws.Column(2).Width = 35;
+        }
+
+        private static void CrearHojaTurnos(XLWorkbook wb,
+            (double manna, double tarde, double noche) turnos)
+        {
+            var ws = wb.Worksheets.Add("Turnos");
+            var c = new Celda(ws);
+
+            c.Escribir(1, 1, "INGRESOS POR TURNO", true, 14);
+
+            var total = turnos.manna + turnos.tarde + turnos.noche;
+
+            var datos = new[]
+            {
+                new { Turno = "🌅 Mañana",  Total = $"S/ {turnos.manna:F2}", Porcentaje = total > 0 ? $"{turnos.manna / total * 100:F1}%" : "0%" },
+                new { Turno = "☀️ Tarde",   Total = $"S/ {turnos.tarde:F2}", Porcentaje = total > 0 ? $"{turnos.tarde / total * 100:F1}%" : "0%" },
+                new { Turno = "🌙 Noche",   Total = $"S/ {turnos.noche:F2}", Porcentaje = total > 0 ? $"{turnos.noche / total * 100:F1}%" : "0%" },
+            };
+
+            ws.Cell(3, 1).InsertTable(datos, "Turnos");
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void CrearHojaTopDias(XLWorkbook wb,
+            List<(string fecha, double maquinas, double productos, double yape, double descuentos, double liquido, double efectivo, int transacciones, int totalProductosVendidos)> diarias)
+        {
+            var ws = wb.Worksheets.Add("Top Días");
+            var c = new Celda(ws);
+
+            c.Escribir(1, 1, "DÍAS CON MÁS INGRESOS (Top 10)", true, 14);
+
+            var top = diarias
+                .OrderByDescending(d => d.maquinas + d.productos)
+                .Take(10)
+                .Select((d, i) => new
+                {
+                    Posición = i + 1,
+                    Fecha = d.fecha,
+                    Total = $"S/ {(d.maquinas + d.productos):F2}",
+                    Máquinas = $"S/ {d.maquinas:F2}",
+                    Productos = $"S/ {d.productos:F2}",
+                    Transacciones = d.transacciones
+                }).ToList();
+
+            if (top.Count > 0)
+                ws.Cell(3, 1).InsertTable(top, "Top");
+
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void CrearHojatendencia(XLWorkbook wb,
+            List<(string fecha, double maquinas, double productos, double yape, double descuentos, double liquido, double efectivo, int transacciones, int totalProductosVendidos)> diarias)
+        {
+            var ws = wb.Worksheets.Add("Tendencia");
+            var c = new Celda(ws);
+
+            c.Escribir(1, 1, "TENDENCIA DE VENTAS (Día vs Día anterior)", true, 14);
+
+            var lista = new List<dynamic>();
+
+            for (int i = 0; i < diarias.Count; i++)
+            {
+                var d = diarias[i];
+                var totalHoy = d.maquinas + d.productos;
+                double totalAyer = 0;
+                if (i > 0)
+                    totalAyer = diarias[i - 1].maquinas + diarias[i - 1].productos;
+
+                var diff = totalHoy - totalAyer;
+                var pct = totalAyer > 0 ? diff / totalAyer * 100 : 0;
+
+                lista.Add(new
+                {
+                    Fecha = d.fecha,
+                    Total_Hoy = $"S/ {totalHoy:F2}",
+                    Total_Día_Anterior = i > 0 ? $"S/ {totalAyer:F2}" : "—",
+                    Diferencia = $"S/ {diff:F2}",
+                    Cambio = i > 0 ? $"{pct:F1}%" : "—"
+                });
             }
-            return fecha;
+
+            if (lista.Count > 0)
+                ws.Cell(3, 1).InsertTable(lista.ToArray(), "Tendencia");
+
+            ws.Columns().AdjustToContents();
+        }
+
+        private static void CrearHojaDiaSemana(XLWorkbook wb,
+            List<(string fecha, double maquinas, double productos, double yape, double descuentos, double liquido, double efectivo, int transacciones, int totalProductosVendidos)> diarias)
+        {
+            var ws = wb.Worksheets.Add("Día Semana");
+            var c = new Celda(ws);
+
+            c.Escribir(1, 1, "VENTAS POR DÍA DE LA SEMANA", true, 14);
+
+            var cult = new System.Globalization.CultureInfo("es-PE");
+            var agrupado = diarias
+                .GroupBy(d =>
+                {
+                    if (DateTime.TryParse(d.fecha, out var dt))
+                        return cult.DateTimeFormat.GetDayName(dt.DayOfWeek);
+                    return d.fecha;
+                })
+                .Select(g => new
+                {
+                    Día = g.Key,
+                    Promedio = $"S/ {g.Average(d => d.maquinas + d.productos):F2}",
+                    Total = $"S/ {g.Sum(d => d.maquinas + d.productos):F2}",
+                    Días = g.Count(),
+                    Máquinas_Prom = $"S/ {g.Average(d => d.maquinas):F2}",
+                    Productos_Prom = $"S/ {g.Average(d => d.productos):F2}"
+                })
+                .ToList();
+
+            if (agrupado.Count > 0)
+                ws.Cell(3, 1).InsertTable(agrupado, "Semana");
+
+            ws.Columns().AdjustToContents();
+        }
+
+        private void MostrarResumen(
+            (double totalMaquinas, double totalProductos, double totalYape, double totalDescuentos, double totalLiquido, double totalEfectivo, int totalTransacciones, int totalDias) resumen,
+            int totalProdVendidos)
+        {
+            PanelResumen.Visibility = Visibility.Visible;
+            LblResumenMaquinas.Text = $"S/ {resumen.totalMaquinas:F2}";
+            LblResumenProductos.Text = $"S/ {resumen.totalProductos:F2}";
+            LblResumenYape.Text = $"S/ {resumen.totalYape:F2}";
+            LblResumenEfectivo.Text = $"S/ {resumen.totalEfectivo:F2}";
+            LblResumenTransacciones.Text = resumen.totalTransacciones.ToString();
+            LblResumenProdVendidos.Text = totalProdVendidos.ToString();
+            LblResumenDescuentos.Text = $"S/ {resumen.totalDescuentos:F2}";
+            LblResumenLiquido.Text = $"S/ {resumen.totalLiquido:F2}";
+        }
+    }
+
+    internal class Celda
+    {
+        private readonly IXLWorksheet _ws;
+
+        public Celda(IXLWorksheet ws) => _ws = ws;
+
+        public void Escribir(int fila, int col, string texto, bool negrita = false, int tamaño = 11)
+        {
+            var cell = _ws.Cell(fila, col);
+            cell.Value = texto;
+            if (negrita) cell.Style.Font.Bold = true;
+            cell.Style.Font.FontSize = tamaño;
         }
     }
 }

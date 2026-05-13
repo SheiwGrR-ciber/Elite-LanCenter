@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EliteLanCenter.Helpers;
+using System;
 using System.IO;
 using System.Windows;
 
@@ -9,6 +10,7 @@ namespace EliteLanCenter
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            ThemeManager.Inicializar();
 
             AppDomain.CurrentDomain.UnhandledException += (s, args) =>
             {

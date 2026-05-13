@@ -198,6 +198,35 @@ namespace EliteLanCenter.Pages
             }
         }
 
+        private void BtnIngresarMercaderia_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Views.IngresoMercaderiaDialog(_todosProductos);
+            dialog.Owner = Window.GetWindow(this);
+
+            if (dialog.ShowDialog() == true)
+            {
+                var producto = dialog.ProductoSeleccionado;
+                if (producto == null) return;
+
+                var (paquetes, unidades, costoTotal) = dialog.ObtenerDatos();
+
+                var (ok, mensaje) = ProductoController.IngresarMercaderia(
+                    producto.Id, paquetes, unidades, costoTotal, _usuario.Id);
+
+                if (ok)
+                {
+                    MessageBox.Show($"✅ {mensaje}", "Éxito",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    CargarProductos();
+                }
+                else
+                {
+                    MessageBox.Show($"⚠️ {mensaje}", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+
         private void BtnTrasladar_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Selecciona un producto y usa el botón 📦 para trasladar stock a mostrador.",

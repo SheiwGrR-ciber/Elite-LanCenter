@@ -5,22 +5,13 @@
         Height="600" Width="420"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="#111827"
+        Background="{DynamicResource BgPrincipalBrush}"
         FontFamily="{StaticResource InterFont}">
 
     <Grid>
-        <!-- Fondo con gradiente aurora -->
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#111827" Offset="0"/>
-                <GradientStop Color="#1A1F35" Offset="0.5"/>
-                <GradientStop Color="#0D1525" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-
         <!-- Barra lateral izquierda aurora -->
         <Rectangle Width="4" HorizontalAlignment="Left"
-                   Fill="#01EFAC" Opacity="0.8"/>
+                   Fill="{DynamicResource AuroraGreenBrush}" Opacity="0.8"/>
 
         <!-- Contenido principal -->
         <StackPanel VerticalAlignment="Center"
@@ -49,30 +40,28 @@
                        FontFamily="{StaticResource MontserratFont}"
                        FontSize="32"
                        FontWeight="Bold"
-                       Foreground="#01EFAC"
+                       Foreground="{DynamicResource AuroraGreenBrush}"
                        HorizontalAlignment="Center"/>
 
             <TextBlock Text="LAN CENTER"
                        FontFamily="{StaticResource MontserratFont}"
                        FontSize="13"
                        FontWeight="SemiBold"
-                       Foreground="#8892B0"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
                        HorizontalAlignment="Center"
                        Margin="0 0 0 8"/>
 
             <TextBlock Text="Sistema de Gestión Administrativa"
                        FontSize="12"
-                       Foreground="#8892B0"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
                        HorizontalAlignment="Center"
                        Margin="0 0 0 32"/>
 
             <!-- Card del formulario -->
             <Border CornerRadius="16"
                     Padding="24"
-                    Margin="0 0 0 0">
-                <Border.Background>
-                    <SolidColorBrush Color="#1A1F35" Opacity="0.9"/>
-                </Border.Background>
+                    Margin="0 0 0 0"
+                    Background="{DynamicResource BgPanelBrush}">
 
                 <StackPanel>
 
@@ -80,16 +69,14 @@
                     <TextBlock Text="Usuario"
                                FontSize="12"
                                FontWeight="SemiBold"
-                               Foreground="#8892B0"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0 0 0 6"/>
 
                     <Border CornerRadius="8"
                             BorderThickness="1"
                             Margin="0 0 0 16"
+                            BorderBrush="{DynamicResource BorderBrush}"
                             x:Name="BorderUsuario">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="#2D3250"/>
-                        </Border.BorderBrush>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"/>
@@ -105,8 +92,8 @@
                                      Height="42"
                                      Background="Transparent"
                                      BorderThickness="0"
-                                     Foreground="#E8EAF6"
-                                     CaretBrush="#01EFAC"
+                                     Foreground="{DynamicResource TextPrimaryBrush}"
+                                     CaretBrush="{DynamicResource AuroraGreenBrush}"
                                      FontSize="13"
                                      VerticalContentAlignment="Center"
                                      KeyDown="TxtUsuario_KeyDown"/>
@@ -117,16 +104,14 @@
                     <TextBlock Text="Contraseña"
                                FontSize="12"
                                FontWeight="SemiBold"
-                               Foreground="#8892B0"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0 0 0 6"/>
 
                     <Border CornerRadius="8"
                             BorderThickness="1"
                             Margin="0 0 0 24"
+                            BorderBrush="{DynamicResource BorderBrush}"
                             x:Name="BorderContrasena">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="#2D3250"/>
-                        </Border.BorderBrush>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"/>
@@ -142,7 +127,7 @@
                                          Height="42"
                                          Background="Transparent"
                                          BorderThickness="0"
-                                         Foreground="#E8EAF6"
+                                         Foreground="{DynamicResource TextPrimaryBrush}"
                                          FontSize="13"
                                          VerticalContentAlignment="Center"
                                          KeyDown="TxtContrasena_KeyDown"/>
@@ -153,7 +138,7 @@
                     <TextBlock x:Name="LblError"
                                Text=""
                                FontSize="12"
-                               Foreground="#EF4444"
+                               Foreground="{DynamicResource ErrorBrush}"
                                HorizontalAlignment="Center"
                                Margin="0 0 0 16"
                                TextWrapping="Wrap"/>
@@ -200,7 +185,7 @@
             <!-- Version -->
             <TextBlock Text="v2.0.0 — Elite LanCenter"
                        FontSize="11"
-                       Foreground="#2D3250"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
                        HorizontalAlignment="Center"
                        Margin="0 16 0 0"/>
 

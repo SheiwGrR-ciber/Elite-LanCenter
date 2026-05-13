@@ -6,7 +6,7 @@
         Height="500"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Background="#111827">
+        Background="{DynamicResource BgPrincipalBrush}">
 
     <Grid Margin="24">
         <Grid.RowDefinitions>
@@ -20,31 +20,31 @@
                    Text="Nuevo Usuario"
                    FontSize="20"
                    FontWeight="Bold"
-                   Foreground="#E8EAF6"
+                   Foreground="{DynamicResource TextPrimaryBrush}"
                    Margin="0 0 0 20"/>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock Text="Nombre completo *" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-                <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+                <TextBlock Text="Nombre completo *" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+                <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                     <TextBox x:Name="TxtNombre"
                              Height="40"
                              Background="Transparent"
                              BorderThickness="0"
-                             Foreground="#E8EAF6"
+                             Foreground="{DynamicResource TextPrimaryBrush}"
                              CaretBrush="#01EFAC"
                              FontSize="13"
                              Padding="12 0"
                              VerticalContentAlignment="Center"/>
                 </Border>
 
-                <TextBlock Text="Nombre de usuario *" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-                <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+                <TextBlock Text="Nombre de usuario *" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+                <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                     <TextBox x:Name="TxtUserName"
                              Height="40"
                              Background="Transparent"
                              BorderThickness="0"
-                             Foreground="#E8EAF6"
+                             Foreground="{DynamicResource TextPrimaryBrush}"
                              CaretBrush="#01EFAC"
                              FontSize="13"
                              Padding="12 0"
@@ -53,25 +53,25 @@
 
                 <TextBlock x:Name="LblContrasenaTexto"
                            Text="Contraseña *"
-                           FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-                <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+                           FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+                <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                     <PasswordBox x:Name="TxtContrasena"
                                  Height="40"
                                  Background="Transparent"
                                  BorderThickness="0"
-                                 Foreground="#E8EAF6"
+                                 Foreground="{DynamicResource TextPrimaryBrush}"
                                  FontSize="13"
                                  Padding="12 0"
                                  VerticalContentAlignment="Center"/>
                 </Border>
 
-                <TextBlock Text="Rol *" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-                <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+                <TextBlock Text="Rol *" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+                <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                     <ComboBox x:Name="CmbRol"
                               Height="40"
                               Background="Transparent"
                               BorderThickness="0"
-                              Foreground="#E8EAF6"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
                               FontSize="13"
                               Padding="12 0"
                               VerticalContentAlignment="Center">
@@ -82,14 +82,14 @@
                 </Border>
 
                 <!-- Requisitos de contraseña -->
-                <Border CornerRadius="8" Background="#1A1F35" Padding="12" Margin="0 0 0 8">
+                <Border CornerRadius="8" Background="{DynamicResource BgPanelBrush}" Padding="12" Margin="0 0 0 8">
                     <StackPanel>
                         <TextBlock Text="La contraseña debe tener:"
-                                   FontSize="11" Foreground="#8892B0" Margin="0 0 0 8"/>
-                        <TextBlock x:Name="LblReq1" Text="✓ Mínimo 8 caracteres" FontSize="11" Foreground="#8892B0"/>
-                        <TextBlock x:Name="LblReq2" Text="✓ Al menos una mayúscula" FontSize="11" Foreground="#8892B0"/>
-                        <TextBlock x:Name="LblReq3" Text="✓ Al menos una minúscula" FontSize="11" Foreground="#8892B0"/>
-                        <TextBlock x:Name="LblReq4" Text="✓ Al menos un número" FontSize="11" Foreground="#8892B0"/>
+                                   FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 8"/>
+                        <TextBlock x:Name="LblReq1" Text="✓ Mínimo 8 caracteres" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBlock x:Name="LblReq2" Text="✓ Al menos una mayúscula" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBlock x:Name="LblReq3" Text="✓ Al menos una minúscula" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBlock x:Name="LblReq4" Text="✓ Al menos un número" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                 </Border>
 
@@ -105,8 +105,8 @@
             <Button Content="Cancelar"
                     Width="100"
                     Height="36"
-                    Background="#2D3250"
-                    Foreground="#E8EAF6"
+                    Background="{DynamicResource BgCardBrush}"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
                     BorderThickness="0"
                     Click="BtnCancelar_Click"
                     Margin="0 0 8 0"/>

@@ -6,7 +6,7 @@
         Height="480"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Background="#111827">
+        Background="{DynamicResource BgPrincipalBrush}">
 
     <Grid Margin="24">
         <Grid.RowDefinitions>
@@ -19,56 +19,56 @@
                    Text="Nuevo Casero"
                    FontSize="20"
                    FontWeight="Bold"
-                   Foreground="#E8EAF6"
+                   Foreground="{DynamicResource TextPrimaryBrush}"
                    Margin="0 0 0 20"/>
 
         <StackPanel Grid.Row="1">
-            <TextBlock Text="Nombre *" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-            <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+            <TextBlock Text="Nombre *" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+            <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                 <TextBox x:Name="TxtNombre"
                          Height="40"
                          Background="Transparent"
                          BorderThickness="0"
-                         Foreground="#E8EAF6"
+                         Foreground="{DynamicResource TextPrimaryBrush}"
                          CaretBrush="#01EFAC"
                          FontSize="13"
                          Padding="12 0"
                          VerticalContentAlignment="Center"/>
             </Border>
 
-            <TextBlock Text="Apodo" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-            <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+            <TextBlock Text="Apodo" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+            <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                 <TextBox x:Name="TxtApodo"
                          Height="40"
                          Background="Transparent"
                          BorderThickness="0"
-                         Foreground="#E8EAF6"
+                         Foreground="{DynamicResource TextPrimaryBrush}"
                          CaretBrush="#01EFAC"
                          FontSize="13"
                          Padding="12 0"
                          VerticalContentAlignment="Center"/>
             </Border>
 
-            <TextBlock Text="Teléfono" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-            <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+            <TextBlock Text="Teléfono" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+            <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                 <TextBox x:Name="TxtTelefono"
                          Height="40"
                          Background="Transparent"
                          BorderThickness="0"
-                         Foreground="#E8EAF6"
+                         Foreground="{DynamicResource TextPrimaryBrush}"
                          CaretBrush="#01EFAC"
                          FontSize="13"
                          Padding="12 0"
                          VerticalContentAlignment="Center"/>
             </Border>
 
-            <TextBlock Text="Código RFID" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-            <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+            <TextBlock Text="Código RFID" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+            <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                 <TextBox x:Name="TxtRFID"
                          Height="40"
                          Background="Transparent"
                          BorderThickness="0"
-                         Foreground="#E8EAF6"
+                         Foreground="{DynamicResource TextPrimaryBrush}"
                          CaretBrush="#01EFAC"
                          FontSize="13"
                          Padding="12 0"
@@ -86,8 +86,8 @@
             <Button Content="Cancelar"
                     Width="100"
                     Height="36"
-                    Background="#2D3250"
-                    Foreground="#E8EAF6"
+                    Background="{DynamicResource BgCardBrush}"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
                     BorderThickness="0"
                     Click="BtnCancelar_Click"
                     Margin="0 0 8 0"/>

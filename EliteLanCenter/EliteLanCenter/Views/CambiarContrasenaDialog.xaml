@@ -6,7 +6,7 @@
         Height="380"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Background="#111827">
+        Background="{DynamicResource BgPrincipalBrush}">
 
     <Grid Margin="24">
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
             <TextBlock Text="Cambiar Contraseña"
                        FontSize="20"
                        FontWeight="Bold"
-                       Foreground="#E8EAF6"/>
+                       Foreground="{DynamicResource TextPrimaryBrush}"/>
             <TextBlock x:Name="LblUsuario"
                        FontSize="13"
                        Foreground="#01EFAC"
@@ -27,13 +27,13 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1">
-            <TextBlock Text="Nueva contraseña *" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-            <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 8">
+            <TextBlock Text="Nueva contraseña *" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+            <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 8">
                 <PasswordBox x:Name="TxtContrasena"
                              Height="40"
                              Background="Transparent"
                              BorderThickness="0"
-                             Foreground="#E8EAF6"
+                             Foreground="{DynamicResource TextPrimaryBrush}"
                              CaretBrush="#01EFAC"
                              FontSize="13"
                              Padding="12 0"
@@ -41,13 +41,13 @@
                              PasswordChanged="TxtContrasena_PasswordChanged"/>
             </Border>
 
-            <TextBlock Text="Confirmar contraseña *" FontSize="12" Foreground="#8892B0" Margin="0 0 0 4"/>
-            <Border CornerRadius="8" Background="#2D3250" Margin="0 0 0 12">
+            <TextBlock Text="Confirmar contraseña *" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 4"/>
+            <Border CornerRadius="8" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 12">
                 <PasswordBox x:Name="TxtConfirmar"
                              Height="40"
                              Background="Transparent"
                              BorderThickness="0"
-                             Foreground="#E8EAF6"
+                             Foreground="{DynamicResource TextPrimaryBrush}"
                              CaretBrush="#01EFAC"
                              FontSize="13"
                              Padding="12 0"
@@ -55,7 +55,7 @@
             </Border>
 
             <!-- Barra de progreso -->
-            <Border CornerRadius="4" Background="#2D3250" Margin="0 0 0 8">
+            <Border CornerRadius="4" Background="{DynamicResource BgCardBrush}" Margin="0 0 0 8">
                 <Grid Height="8" Margin="8 4">
                     <Border x:Name="BarraProgreso" CornerRadius="2" Background="#EF4444" Width="0"/>
                 </Grid>
@@ -63,18 +63,18 @@
             <TextBlock x:Name="LblFortaleza"
                        Text="Fortaleza: "
                        FontSize="11"
-                       Foreground="#8892B0"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
                        Margin="0 0 0 12"/>
 
             <!-- Requisitos -->
-            <Border CornerRadius="8" Background="#1A1F35" Padding="12" Margin="0 0 0 8">
+            <Border CornerRadius="8" Background="{DynamicResource BgPanelBrush}" Padding="12" Margin="0 0 0 8">
                 <StackPanel>
                     <TextBlock Text="La contraseña debe tener:"
-                               FontSize="11" Foreground="#8892B0" Margin="0 0 0 8"/>
-                    <TextBlock x:Name="LblReq1" Text="✗ Mínimo 8 caracteres" FontSize="11" Foreground="#8892B0"/>
-                    <TextBlock x:Name="LblReq2" Text="✗ Al menos una mayúscula" FontSize="11" Foreground="#8892B0"/>
-                    <TextBlock x:Name="LblReq3" Text="✗ Al menos una minúscula" FontSize="11" Foreground="#8892B0"/>
-                    <TextBlock x:Name="LblReq4" Text="✗ Al menos un número" FontSize="11" Foreground="#8892B0"/>
+                               FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 8"/>
+                    <TextBlock x:Name="LblReq1" Text="✗ Mínimo 8 caracteres" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <TextBlock x:Name="LblReq2" Text="✗ Al menos una mayúscula" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <TextBlock x:Name="LblReq3" Text="✗ Al menos una minúscula" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <TextBlock x:Name="LblReq4" Text="✗ Al menos un número" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
                 </StackPanel>
             </Border>
 
@@ -88,8 +88,8 @@
             <Button Content="Cancelar"
                     Width="100"
                     Height="36"
-                    Background="#2D3250"
-                    Foreground="#E8EAF6"
+                    Background="{DynamicResource BgCardBrush}"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
                     BorderThickness="0"
                     Click="BtnCancelar_Click"
                     Margin="0 0 8 0"/>

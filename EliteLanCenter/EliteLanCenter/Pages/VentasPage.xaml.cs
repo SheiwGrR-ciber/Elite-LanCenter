@@ -144,8 +144,15 @@ namespace EliteLanCenter.Pages
             }
 
             var esFiado = ChkFiado.IsChecked == true;
+            var numeroPc = esFiado ? TxtNumeroPc.Text.Trim() : null;
             var (ok, mensaje, _) = VentaController.RegistrarVenta(
-                _turnoActivo.Id, productoId, cantidad, esFiado);
+                _turnoActivo.Id, productoId, cantidad, esFiado, numeroPc);
+
+            if (ok)
+            {
+                TxtNumeroPc.Text = "";
+                ChkFiado.IsChecked = false;
+            }
 
             LblMensaje.Text = mensaje;
             LblMensaje.Foreground = ok
@@ -159,6 +166,14 @@ namespace EliteLanCenter.Pages
                 txtCantidad.Text = "1";
                 CargarDatos();
             }
+        }
+
+        // ── Toggle campo PC# al marcar fiado ───
+        private void ChkFiado_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            PanelNumeroPc.Visibility = ChkFiado.IsChecked == true
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         // ── Pagar fiado ────────────────────────
